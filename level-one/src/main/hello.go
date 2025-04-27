@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"io"
+	"strings"
 	"time"
 )
 import "os"
@@ -159,10 +162,14 @@ func delaySample() {
 
 func handleFiles() {
 	fmt.Println("handle files")
-	fileCreated := createFile("testes", ".md")
-	if fileCreated != nil {
-		openFileByName("testes.md")
-	}
+	fileName := "sites"
+	format := ".txt"
+	fileNameValue := fileName + format
+
+	createFile("logs", ".txt")
+	readFileByName(fileNameValue)
+	readFileByNameWithBufer(fileNameValue)
+	writeFile("exemplo_escrita.txt", "Hello World")
 }
 
 func createFile(name string, format string) *os.File {
@@ -174,15 +181,46 @@ func createFile(name string, format string) *os.File {
 		return nil
 	}
 	fmt.Println("Arquivo criado com sucesso", fileName)
+	fileCreated.Close()
 	return fileCreated
 }
 
-func openFileByName(name string) **os.File {
+func readFileByName(name string) {
+	file, err := os.ReadFile(name)
+	if err != nil {
+		fmt.Println("Erro ao abrir o arquivo", name, "Error -> ", err)
+		return
+	}
+	fmt.Println("Arquivo aberto com sucesso", name, string(file))
+}
+
+func readFileByNameWithBufer(name string) {
 	file, err := os.Open(name)
 	if err != nil {
 		fmt.Println("Erro ao abrir o arquivo", name, "Error -> ", err)
-		return nil
+		return
 	}
-	fmt.Println("Arquivo aberto com sucesso", name, file)
-	return &file
+
+	reader := bufio.NewReader(file)
+	for {
+		line, err := reader.ReadString('\n')
+		line = strings.TrimSpace(line)
+		if err == io.EOF {
+			break
+		}
+		fmt.Println("Linha", line)
+	}
+
+	file.Close()
+}
+
+func writeFile(name string, content string) {
+	file, err := os.Create(name)
+	if err != nil {
+		fmt.Println("Erro ao criar o arquivo", name, "Error -> ", err)
+		return
+	}
+	file.WriteString(content)
+	file.Close()
+	fmt.Println("Arquivo escrito com sucesso", name, content)
 }
