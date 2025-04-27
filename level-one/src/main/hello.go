@@ -8,10 +8,11 @@ import "os"
 import "net/http"
 
 const (
-	EXIT             = 0
-	START_MONITORING = 1
-	SHOW_LOGS        = 2
-	SHOW_SAMPLES     = 3
+	Exit            = 0
+	StartMonitoring = 1
+	ShowLogs        = 2
+	ShowSamples     = 3
+	HandleFiles     = 4
 )
 
 const (
@@ -47,6 +48,7 @@ func showMenu() {
 	fmt.Println("1- Iniciar Monitoramento")
 	fmt.Println("2- Exibir Logs")
 	fmt.Println("3- Executar exemplos")
+	fmt.Println("4- Ler arquivos")
 }
 
 func getCommand() int {
@@ -57,21 +59,24 @@ func getCommand() int {
 
 // validateCommand if sempre deve retornar true ou false e nao usa parenteses
 func validateCommand(command int) bool {
-	return command >= 0 && command <= 3
+	return command >= 0 && command <= 4
 }
 
 func handleCommand(command int) {
 	switch command {
-	case EXIT:
+	case Exit:
 		fmt.Println("Saindo do programa...")
 		os.Exit(0) // Finaliza o programa com sucesso, para erro é -1
-	case START_MONITORING:
+	case StartMonitoring:
 		startMonitoring()
-	case SHOW_LOGS:
+	case ShowLogs:
 		fmt.Println("Exibindo logs...")
-	case SHOW_SAMPLES:
+	case ShowSamples:
 		fmt.Println("Exibindo exemplos	...")
 		handleSamples()
+	case HandleFiles:
+		fmt.Println("Lendo arquivos...")
+		handleFiles()
 	default:
 		fmt.Println("Comando não reconhecido")
 		os.Exit(-1)
@@ -150,4 +155,34 @@ func delaySample() {
 	delay := DELAY_IN_SECONDS * time.Second
 	time.Sleep(delay)
 	fmt.Println("delay sample", delay, "seconds")
+}
+
+func handleFiles() {
+	fmt.Println("handle files")
+	fileCreated := createFile("testes", ".md")
+	if fileCreated != nil {
+		openFileByName("testes.md")
+	}
+}
+
+func createFile(name string, format string) *os.File {
+	fmt.Println("create file")
+	fileName := name + format
+	fileCreated, errFileCreated := os.Create(fileName)
+	if errFileCreated != nil {
+		fmt.Println("Erro ao criar o arquivo", fileName, "Error -> ", errFileCreated)
+		return nil
+	}
+	fmt.Println("Arquivo criado com sucesso", fileName)
+	return fileCreated
+}
+
+func openFileByName(name string) **os.File {
+	file, err := os.Open(name)
+	if err != nil {
+		fmt.Println("Erro ao abrir o arquivo", name, "Error -> ", err)
+		return nil
+	}
+	fmt.Println("Arquivo aberto com sucesso", name, file)
+	return &file
 }
