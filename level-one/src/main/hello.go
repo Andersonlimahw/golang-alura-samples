@@ -1,20 +1,39 @@
 package main
 
 import "fmt"
-import "reflect"
+
+const (
+	EXIT             = 0
+	START_MONITORING = 1
+	SHOW_LOGS        = 2
+)
 
 func main() {
 	var name string = "Lemon"
-	var age = 18 // tipagem implicita por inferencia
-	var idade float32 = 18.5
-	var salario float64 = 50000.50
-	gender := "M" // tipagem explicita som sugar sintaze
+	version := 1.1
 
-	fmt.Println("Hello, world!", name)
-	fmt.Println("Age: ", age)
-	fmt.Println("Idade: ", idade)
-	fmt.Println("Salario: ", salario)
-	fmt.Println("Sexo: ", gender)
-	fmt.Println(reflect.TypeOf(name))
-	fmt.Println(reflect.TypeOf(age))
+	fmt.Println("Olá, Mr", name)
+	fmt.Println("Este programa esta na version", version)
+
+	showMenu()
+
+	var command int
+	fmt.Scan(&command)
+
+	switch command {
+	case EXIT:
+		fmt.Println("Saindo do programa...")
+	case START_MONITORING:
+		fmt.Println("Iniciando monitoramento...")
+	case SHOW_LOGS:
+		fmt.Println("Exibindo logs...")
+	default:
+		fmt.Println("Comando não reconhecido")
+	}
+}
+
+func showMenu() {
+	fmt.Println("1- Iniciar Monitoramento")
+	fmt.Println("2- Exibir Logs")
+	fmt.Println("0- Sair do Programa")
 }
