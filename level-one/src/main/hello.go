@@ -20,6 +20,11 @@ func main() {
 	var command int
 	fmt.Scan(&command)
 
+	if !validateCommand(command) {
+		fmt.Println("Comando não reconhecido")
+		return
+	}
+
 	switch command {
 	case EXIT:
 		fmt.Println("Saindo do programa...")
@@ -36,4 +41,9 @@ func showMenu() {
 	fmt.Println("1- Iniciar Monitoramento")
 	fmt.Println("2- Exibir Logs")
 	fmt.Println("0- Sair do Programa")
+}
+
+// validateCommand if sempre deve retornar true ou false e nao usa parenteses
+func validateCommand(command int) bool {
+	return command >= 0 && command <= 2
 }
