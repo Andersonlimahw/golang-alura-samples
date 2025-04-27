@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 import "os"
 import "net/http"
 
@@ -9,6 +12,11 @@ const (
 	START_MONITORING = 1
 	SHOW_LOGS        = 2
 	SHOW_SAMPLES     = 3
+)
+
+const (
+	DELAY_IN_SECONDS    = 3
+	MAX_NUMBER_OF_SITES = 2
 )
 
 func main() {
@@ -91,6 +99,8 @@ func handleSamples() {
 	addElement("Mickey")
 	pokerSamples()
 	forSample()
+	forWithRangeSample()
+	delaySample()
 }
 
 func sliceSample() {
@@ -122,7 +132,22 @@ func pokerSamples() {
 
 func forSample() {
 	fmt.Println("for sample")
-	for i := 0; i < 3; i++ {
+	for i := 0; i < MAX_NUMBER_OF_SITES; i++ {
 		fmt.Println(i)
 	}
+}
+
+func forWithRangeSample() {
+	fmt.Println("for with range sample")
+	pontosPlanningPoker := []int{1, 2, 3, 5, 8, 13, 21}
+	for i, ponto := range pontosPlanningPoker {
+		fmt.Println("Indice", i, "Ponto", ponto)
+	}
+}
+
+func delaySample() {
+	fmt.Println("delay sample")
+	delay := DELAY_IN_SECONDS * time.Second
+	time.Sleep(delay)
+	fmt.Println("delay sample", delay, "seconds")
 }
