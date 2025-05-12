@@ -74,6 +74,7 @@ func handleCommand(command int) {
 		startMonitoring()
 	case ShowLogs:
 		fmt.Println("Exibindo logs...")
+		handleLogsReader()
 	case ShowSamples:
 		fmt.Println("Exibindo exemplos	...")
 		handleSamples()
@@ -169,7 +170,9 @@ func handleFiles() {
 	createFile("logs", ".txt")
 	readFileByName(fileNameValue)
 	readFileByNameWithBufer(fileNameValue)
-	writeFile("exemplo_escrita.txt", "Hello World")
+	now := time.Now().Format(time.DateTime)
+	message := "Hello World, now is " + now
+	writeFile("exemplo_escrita.txt", message)
 }
 
 func createFile(name string, format string) *os.File {
@@ -223,4 +226,13 @@ func writeFile(name string, content string) {
 	file.WriteString(content)
 	file.Close()
 	fmt.Println("Arquivo escrito com sucesso", name, content)
+}
+
+func handleLogsReader() {
+	fmt.Println("handle logs reader")
+	fileName := "logs"
+	format := ".txt"
+	createFile(fileName, format)
+	writeFile(fileName+format, "Hello World, from handleLogsReader")
+	readFileByNameWithBufer(fileName + format)
 }
